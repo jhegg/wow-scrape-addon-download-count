@@ -1,0 +1,23 @@
+{
+  "name": "wow-scrape-addon-download-count",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhegg/wow-scrape-addon-download-count"
+  },
+  "license": "MIT",
+  "description": "Scrapes the addon download count from CurseForge and WowInterface",
+  "author": "Josh Hegg",
+  "engines": {
+    "node": ">=0.12"
+  },
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "commander": "^2.8.1",
+    "request": "^2.58.0"
+  },
+  "private": true,
+  "bin": {
+    "wow-scrape-addon-download-count": "./wow-scrape-addon-download-count.js"
+  }
+}

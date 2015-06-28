@@ -1,13 +1,38 @@
+#!/usr/bin/env node
+
+var program = require('commander');
 var request = require('request');
 var cheerio = require('cheerio');
 
 var curseForgeDownloadCount = undefined;
 var wowInterfaceDownloadCount = undefined;
 
-// var url = process.argv[2];
-var addonName = 'GoldCounter';
-var curseForgeUrl = 'http://wow.curseforge.com/addons/goldcounter/';
-var wowInterfaceUrl = 'http://www.wowinterface.com/downloads/author-318870.html'
+program
+  .version('0.0.1')
+  .usage('-n <addonName> -c <curseForgeAddonUrl> -w <wowInterfaceAuthorUrl>')
+  .option('-c, --curseforge <url>', 'CurseForge Addon URL')
+  .option('-w, --wowinterface <url>', 'WowInterface Author URL')
+  .option('-n, --addonName <addonName>', 'Addon Name');
+
+program.on('--help', function() {
+  console.log('  Example:');
+  console.log('    $ wow-scrape-addon-download-count -n GoldCounter'
+    + ' -c http://wow.curseforge.com/addons/goldcounter/'
+    + ' -w http://www.wowinterface.com/downloads/author-318870.html');
+  console.log('');
+})
+
+program.parse(process.argv);
+
+if (!program.addonName || !program.curseforge || !program.wowinterface) {
+  console.error('Error:', 'One or more required arguments were not provided.');
+  program.help();
+  process.exit(1)
+}
+
+var addonName = program.addonName;
+var curseForgeUrl = program.curseforge;
+var wowInterfaceUrl = program.wowinterface;
 
 function reportTotalIfReady() {
   if (curseForgeDownloadCount && wowInterfaceDownloadCount) {
@@ -41,7 +66,7 @@ function scrapeDownloadCountFromUrl(url, callback) {
       reportTotalIfReady()
     } else {
       if (error) throw error;
-      console.error('Error: statusCode=' + response.statusCode)
+      console.error('Error: statusCode=' + response.statusCode + ', url=' + url)
     }
   });
 }
